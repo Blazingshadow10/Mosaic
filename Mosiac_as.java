@@ -1,3 +1,0 @@
-class mosiac_as {
-    
-}
