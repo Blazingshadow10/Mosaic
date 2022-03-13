@@ -6,24 +6,23 @@ import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 
-class ABCTiles extends JPanel {
+class ABCTiles extends JPanel implements MouseListener {
     private int r, g, b;
     private String letter;
     int objectDraw;
-    
     private Face face;
+
 
     ABCTiles() {
         super();
-        face = new Face();
         RandomVariable();
     }
 
@@ -34,9 +33,15 @@ class ABCTiles extends JPanel {
 
         objectDraw = RandomNum(1, 2);
 
+        face = new Face(getHeight(),getWidth());
+
         int randletter = RandomNum(65, 90);
-        letter = Character.toString((char)randletter);    
+        letter = Character.toString((char)randletter);
+        
+        this.addMouseListener(this);
     }
+
+    
 
     private static int RandomNum(int min, int max) {
         Random ran = new Random();
@@ -47,19 +52,11 @@ class ABCTiles extends JPanel {
         return ((colorIn+128)%256);
     }
 
-
-    public void mouseClicked(MouseEvent e) {
-        objectDraw = 3;
-    }
-
     public void paintComponent(Graphics e) {
         super.paintComponent(e); 
 
         int tileWidth = getWidth();
         int tileHeight = getHeight();
-
-        face.setPositionX(0);
-        face.setPositionY(0);
 
         face.setheight(getHeight());
         face.setwidth(getWidth());
@@ -72,10 +69,7 @@ class ABCTiles extends JPanel {
         if (objectDraw == 2) {
             e.fillOval(0, 0, tileWidth, tileHeight);    
         }
-        if (objectDraw == 3) {
-            face.paintComponent(e);
-        }
-
+        
         e.setColor(new Color(GetContrastingColor(r),GetContrastingColor(g),GetContrastingColor(b)));
 
         final int fontSize=50;
@@ -83,12 +77,40 @@ class ABCTiles extends JPanel {
         int positionX = (tileWidth/3);
         int positionY = (tileHeight/2)+20;
         e.drawString(letter,positionX,positionY);
+
+        if (objectDraw == 3) {
+            face.paintComponent(e);
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        objectDraw = 3;
+        repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
 
 class MosaicFrame extends JFrame implements ActionListener {
     private ArrayList<ABCTiles> tileList = new ArrayList<ABCTiles>();
-    //private ArrayList<Face> faceList = new ArrayList<Face>();
 
     public MosaicFrame() {
         setBounds(100,50,1200,800);

@@ -8,8 +8,12 @@ import java.util.ArrayList;
 // Randomize everything
 interface anyRandom {
     public static int ran(int min, int max) {
+        if (min == max) {
+            return min;
+        } else {
         Random ran = new Random();
         return min + ran.nextInt(max-min+1);
+        }
     }
 }
 
@@ -56,12 +60,12 @@ class Face extends EyeDraw implements anyRandom {
         smileStatus = x;
     }
     
-    public Face() {
+    public Face(int height, int width) {
         
-        xPosition = anyRandom.ran(0, 700);
-        yPosition = anyRandom.ran(0, 600);
-        height = anyRandom.ran(100,300);
-        width = anyRandom.ran(100,300);
+        xPosition = anyRandom.ran(0, 0);
+        yPosition = anyRandom.ran(0, 0);
+        height = anyRandom.ran((int)(height/2),height);
+        width = anyRandom.ran((int)(width/2),width);
         smileStatus = anyRandom.ran(1,3);
 
         // Eye Math and set up
@@ -129,7 +133,7 @@ class FacePanel extends JPanel implements anyRandom {
     public FacePanel() {
         int numFaces = anyRandom.ran(3,10);
         for (int i = 1; i <= numFaces; i++) {
-            FaceList.add(new Face());
+            FaceList.add(new Face(getHeight(),getWidth()));
         }
     }
 
