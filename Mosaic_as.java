@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -13,21 +15,24 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 class ABCTiles extends JPanel {
-    private int red, green, blue;
+    private int r, g, b;
     private String letter;
-    int squareOrCircle;
+    int objectDraw;
+    
+    private Face face;
 
     ABCTiles() {
         super();
+        face = new Face();
         RandomVariable();
     }
 
     final public void RandomVariable() {
-        red = RandomNum(0,255);
-        green = RandomNum(0,255);
-        blue = RandomNum(0,255);
+        r = RandomNum(0,255);
+        g = RandomNum(0,255);
+        b = RandomNum(0,255);
 
-        squareOrCircle = RandomNum(1, 2);
+        objectDraw = RandomNum(1, 2);
 
         int randletter = RandomNum(65, 90);
         letter = Character.toString((char)randletter);    
@@ -38,39 +43,55 @@ class ABCTiles extends JPanel {
         return min + ran.nextInt(max-min+1);
     }   
 
-     public void paintComponent(Graphics g) {
-        super.paintComponent(g); 
-
-        int tileWidth = getWidth();
-        int tileHeight = getHeight();
-        
-        g.setColor(new Color(red,green,blue));
-
-        if (squareOrCircle == 1) {
-            g.fillRect(0, 0, tileWidth, tileHeight);
-        } else {
-            g.fillOval(0, 0, tileWidth, tileHeight);
-        }
-        
-        g.setColor(new Color(GetContrastingColor(red),GetContrastingColor(green),GetContrastingColor(blue)));
-
-        final int fontSize=50;
-        g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
-        int positionX = (tileWidth/2)-20;
-        int positionY = (tileHeight/2)+20;
-        g.drawString(letter,positionX,positionY);
-    }
-
     private static int GetContrastingColor(int colorIn) {
         return ((colorIn+128)%256);
     }
+
+
+    public void mouseClicked(MouseEvent e) {
+        objectDraw = 3;
+    }
+
+    public void paintComponent(Graphics e) {
+        super.paintComponent(e); 
+
+        int tileWidth = getWidth();
+        int tileHeight = getHeight();
+
+        face.setPositionX(0);
+        face.setPositionY(0);
+
+        face.setheight(getHeight());
+        face.setwidth(getWidth());
+        
+        e.setColor(new Color(r,g,b));
+
+        if (objectDraw == 1) {
+            e.fillRect(0, 0, tileWidth, tileHeight);
+        } 
+        if (objectDraw == 2) {
+            e.fillOval(0, 0, tileWidth, tileHeight);    
+        }
+        if (objectDraw == 3) {
+            face.paintComponent(e);
+        }
+
+        e.setColor(new Color(GetContrastingColor(r),GetContrastingColor(g),GetContrastingColor(b)));
+
+        final int fontSize=50;
+        e.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
+        int positionX = (tileWidth/3);
+        int positionY = (tileHeight/2)+20;
+        e.drawString(letter,positionX,positionY);
+    }
 }
 
-class MosaicLiteFrame extends JFrame implements ActionListener {
-    private ArrayList<ABCTiles> tileList;
+class MosaicFrame extends JFrame implements ActionListener {
+    private ArrayList<ABCTiles> tileList = new ArrayList<ABCTiles>();
+    //private ArrayList<Face> faceList = new ArrayList<Face>();
 
-    public MosaicLiteFrame() {
-        setBounds(200,200,1200,800);
+    public MosaicFrame() {
+        setBounds(100,50,1200,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container contentPane = getContentPane();
@@ -79,16 +100,15 @@ class MosaicLiteFrame extends JFrame implements ActionListener {
         JPanel buttonPanel = new JPanel();
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        JButton reroll = new JButton("Reroll");
-        buttonPanel.add(reroll);
-        reroll.addActionListener(this);
+        JButton reRoll = new JButton("Reroll");
+        buttonPanel.add(reRoll);
+        reRoll.addActionListener(this);
 
         JPanel ABCTiles = new JPanel();
         contentPane.add(ABCTiles, BorderLayout.CENTER);
         ABCTiles.setLayout(new GridLayout(12,12));
-
-        tileList = new ArrayList<ABCTiles>();
-        for(int i=1; i<145; i++) {
+        
+        for(int i=0; i<144; i++) {
             ABCTiles tile = new ABCTiles();
             tileList.add(tile);
             ABCTiles.add(tile);
@@ -98,16 +118,16 @@ class MosaicLiteFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         for(ABCTiles tile : tileList) {
             tile.RandomVariable();
-        }
+        }    
         repaint();
     }
 }
 
 public class Mosaic_as {
     public static void main(String[] args) {
-        System.out.println("MosaicLite Starting...");
+        System.out.println("Mosaic Starting...");
 
-        MosaicLiteFrame myMosaicLiteFrame = new MosaicLiteFrame();
-        myMosaicLiteFrame.setVisible(true);
+        MosaicFrame MosaicFrame = new MosaicFrame();
+        MosaicFrame.setVisible(true);
     }
 }

@@ -22,6 +22,7 @@ class Face extends EyeDraw implements anyRandom {
     private int smileStatus;
     private EyeDraw eyesL;
     private EyeDraw eyesR;
+    
 
     // Getters and Setters
     public int getXPosition() {
@@ -54,8 +55,9 @@ class Face extends EyeDraw implements anyRandom {
     public void setsmileStatus(int x) {
         smileStatus = x;
     }
-
+    
     public Face() {
+        
         xPosition = anyRandom.ran(0, 700);
         yPosition = anyRandom.ran(0, 600);
         height = anyRandom.ran(100,300);
@@ -102,6 +104,7 @@ class Face extends EyeDraw implements anyRandom {
                 break;
         }
     }
+
 }
 
 // Draws Eyes
