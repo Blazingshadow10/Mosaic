@@ -17,10 +17,13 @@ import java.util.ArrayList;
 class ABCTiles extends JPanel {
     private int r, g, b;
     private String letter;
-    int squareOrCircle;
+    int objectDraw;
+    
+    private Face face;
 
     ABCTiles() {
         super();
+        face = new Face();
         RandomVariable();
     }
 
@@ -29,7 +32,7 @@ class ABCTiles extends JPanel {
         g = RandomNum(0,255);
         b = RandomNum(0,255);
 
-        squareOrCircle = RandomNum(1, 2);
+        objectDraw = RandomNum(1, 2);
 
         int randletter = RandomNum(65, 90);
         letter = Character.toString((char)randletter);    
@@ -44,35 +47,51 @@ class ABCTiles extends JPanel {
         return ((colorIn+128)%256);
     }
 
-     public void paintComponent(Graphics e) {
+
+    public void mouseClicked(MouseEvent e) {
+        objectDraw = 3;
+    }
+
+    public void paintComponent(Graphics e) {
         super.paintComponent(e); 
 
         int tileWidth = getWidth();
         int tileHeight = getHeight();
+
+        face.setPositionX(0);
+        face.setPositionY(0);
+
+        face.setheight(getHeight());
+        face.setwidth(getWidth());
         
         e.setColor(new Color(r,g,b));
 
-        if (squareOrCircle == 1) {
+        if (objectDraw == 1) {
             e.fillRect(0, 0, tileWidth, tileHeight);
-        } else {
-            e.fillOval(0, 0, tileWidth, tileHeight);
+        } 
+        if (objectDraw == 2) {
+            e.fillOval(0, 0, tileWidth, tileHeight);    
         }
-        
+        if (objectDraw == 3) {
+            face.paintComponent(e);
+        }
+
         e.setColor(new Color(GetContrastingColor(r),GetContrastingColor(g),GetContrastingColor(b)));
 
         final int fontSize=50;
         e.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
         int positionX = (tileWidth/3);
-        int positionY = ((int)((tileHeight)*(1/4)));
+        int positionY = (tileHeight/2)+20;
         e.drawString(letter,positionX,positionY);
     }
 }
 
 class MosaicFrame extends JFrame implements ActionListener {
-    private ArrayList<ABCTiles> tileList;
+    private ArrayList<ABCTiles> tileList = new ArrayList<ABCTiles>();
+    //private ArrayList<Face> faceList = new ArrayList<Face>();
 
     public MosaicFrame() {
-        setBounds(200,200,1200,800);
+        setBounds(100,50,1200,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container contentPane = getContentPane();
@@ -88,9 +107,8 @@ class MosaicFrame extends JFrame implements ActionListener {
         JPanel ABCTiles = new JPanel();
         contentPane.add(ABCTiles, BorderLayout.CENTER);
         ABCTiles.setLayout(new GridLayout(12,12));
-
-        tileList = new ArrayList<ABCTiles>();
-        for(int i=1; i<145; i++) {
+        
+        for(int i=0; i<144; i++) {
             ABCTiles tile = new ABCTiles();
             tileList.add(tile);
             ABCTiles.add(tile);
@@ -100,7 +118,7 @@ class MosaicFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         for(ABCTiles tile : tileList) {
             tile.RandomVariable();
-        }
+        }    
         repaint();
     }
 }
