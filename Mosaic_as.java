@@ -20,7 +20,6 @@ class ABCTiles extends JPanel implements MouseListener {
     int objectDraw;
     private Face face;
 
-
     ABCTiles() {
         super();
         RandomVariable();
@@ -50,6 +49,20 @@ class ABCTiles extends JPanel implements MouseListener {
 
     private static int GetContrastingColor(int colorIn) {
         return ((colorIn+128)%256);
+    }
+
+    public String toString() {
+        String shape = " ";
+        String s;
+        if (objectDraw == 1) {
+            shape = "Rectangle";
+        } 
+        if (objectDraw == 2) {
+            shape = "Circle";   
+        }
+        
+        s = "Shape: " + shape + " Color: " + r + " "  + g + " "  + b + " Letter: " + letter;
+        return s;
     }
 
     public void paintComponent(Graphics e) {
@@ -119,11 +132,11 @@ class MosaicFrame extends JFrame implements ActionListener {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        JPanel buttonPanel = new JPanel();
-        contentPane.add(buttonPanel, BorderLayout.SOUTH);
+        JPanel reRollPanel = new JPanel();
+        contentPane.add(reRollPanel, BorderLayout.SOUTH);
 
         JButton reRoll = new JButton("Reroll");
-        buttonPanel.add(reRoll);
+        reRollPanel.add(reRoll);
         reRoll.addActionListener(this);
 
         JPanel ABCTiles = new JPanel();
@@ -134,12 +147,16 @@ class MosaicFrame extends JFrame implements ActionListener {
             ABCTiles tile = new ABCTiles();
             tileList.add(tile);
             ABCTiles.add(tile);
+            System.out.println((i+1) + ": "+ tile);
         }
     }
 
     public void actionPerformed(ActionEvent e) {
+        int count = 1;
         for(ABCTiles tile : tileList) {
             tile.RandomVariable();
+            System.out.println(count + ": "+ tile);
+            count++;
         }    
         repaint();
     }
