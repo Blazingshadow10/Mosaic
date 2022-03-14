@@ -162,7 +162,7 @@ class MosaicFrame extends JFrame implements ActionListener {
     }
 }
 
-public class Mosaic_as {
+public class Mosaic {
     public static void main(String[] args) {
         System.out.println("Mosaic Starting...");
 
