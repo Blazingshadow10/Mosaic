@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.util.ArrayList;
 
+
 // Randomize everything
 interface anyRandom {
     public static int ran(int min, int max) {
@@ -61,7 +62,6 @@ class Face extends EyeDraw implements anyRandom {
     }
     
     public Face(int height, int width) {
-        
         xPosition = anyRandom.ran(0, 0);
         yPosition = anyRandom.ran(0, 0);
         height = anyRandom.ran((int)(height/2),height);
